@@ -1,20 +1,35 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from "@react-navigation/native"
+import { Platform, useColorScheme } from "react-native"
+import {
+  ReactNavigationDarkTheme,
+  ReactNavigationDefaultTheme,
+} from "./src/themes/ReactNavigationThemes"
+import { ThemeProvider } from "./src/themes/ThemeProvider"
+import RootNavigator from "./src/navigation/RootNavigator"
+import { StoreProvider, rootStore } from "./src/store"
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+  let scheme = useColorScheme()
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  console.log(scheme)
+
+  //
+  Platform.OS === "web" ? (scheme = "light") : (scheme = scheme)
+  //
+
+  return (
+    <StoreProvider value={rootStore}>
+      <ThemeProvider>
+        <NavigationContainer
+          theme={
+            scheme === "dark"
+              ? ReactNavigationDarkTheme
+              : ReactNavigationDefaultTheme
+          }
+        >
+          <RootNavigator />
+        </NavigationContainer>
+      </ThemeProvider>
+    </StoreProvider>
+  )
+}
