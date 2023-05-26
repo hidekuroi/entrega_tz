@@ -7,7 +7,7 @@ type ProductCardPropsType = {
   item: ProductType
   colors: ColorsType
   dark: boolean
-  disabled?: boolean
+  disabled?: any
 
   onPress?: () => void
 }
@@ -19,7 +19,7 @@ const ProductCard = ({
   onPress,
   disabled = false,
 }: ProductCardPropsType) => {
-  console.log("renderITEM")
+  console.log(disabled)
   return (
     <View style={{ minHeight: 200, width: "50%" }}>
       <View
@@ -35,7 +35,7 @@ const ProductCard = ({
           style={{ height: "100%", width: "100%", borderRadius: 22 }}
           activeOpacity={1}
           underlayColor={colors.touching}
-          onPress={() => onPress && onPress()}
+          onPress={disabled ? undefined : () => onPress && onPress()}
         >
           <View
             style={{
@@ -60,6 +60,24 @@ const ProductCard = ({
               }}
               source={require("../img/placeholder.jpg")}
             />
+            {disabled && (
+              <View
+                style={{
+                  position: "absolute",
+                  // bottom: 0,
+                  top: 0,
+                  backgroundColor: colors.modalInput,
+                  height: "100%",
+                  width: "100%",
+                  borderRadius: 22,
+                  opacity: 0.65,
+                  alignItems: 'center',
+                  
+                }}
+              >
+                <Text style={{color: colors.text, fontSize: 17, fontWeight: '600', marginTop: '40%'}}>Not available</Text>
+              </View>
+            )}
             {/* </View> */}
             <View
               style={{
@@ -72,7 +90,7 @@ const ProductCard = ({
             >
               <Text
                 style={{
-                  color: disabled ? "red" : colors.text,
+                  color: disabled ? colors.disabledText : colors.text,
                   fontWeight: "500",
                   fontSize: 17,
                 }}
@@ -94,7 +112,12 @@ const ProductCard = ({
                   shadowRadius: 1,
                 }}
               >
-                <Text style={{ color: colors.text, fontSize: 17 }}>
+                <Text
+                  style={{
+                    color: disabled ? colors.disabledText : colors.text,
+                    fontSize: 17,
+                  }}
+                >
                   {item.price} ₽
                 </Text>
               </View>
@@ -109,6 +132,7 @@ const ProductCard = ({
 export default React.memo(ProductCard, (prevProps, nextProps) => {
   return (
     prevProps.item._id === nextProps.item._id &&
-    prevProps.colors === nextProps.colors
+    prevProps.colors === nextProps.colors &&
+    prevProps.disabled === nextProps.disabled
   )
 })

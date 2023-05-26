@@ -24,37 +24,6 @@ const Settings: FC<SettingsScreenProps> = ({ navigation }) => {
   return (
     <ScrollView contentInsetAdjustmentBehavior="automatic">
       <View style={{ justifyContent: "center", alignItems: "center" }}>
-        {/* <Card colors={colors}> */}
-        {/* <Card.Item
-            text={i18n.t('general')}
-            // disabled
-            onPress={
-              // alert(
-              //   `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`
-              // )
-              () => navigation.navigate("General")
-            }
-            icon={{
-              iconName: "cog-outline",
-              shape: "square",
-              color: colors.inputPlaceholder,
-            }}
-            chevron
-          /> */}
-        {/* <Card.Item
-            text={i18n.t('appearence')}
-            helperText={dark ? i18n.t('appearenceDark') : i18n.t('appearenceLight')}
-            onPress={() => navigation.navigate("Appearence")}
-            icon={{
-              iconName: "color-palette",
-              shape: "square",
-              color: "#ff69cc",
-            }}
-            chevron
-          /> */}
-
-        {/* </Card> */}
-
         <Card colors={colors}>
           <Card.Item
             text="Debug"

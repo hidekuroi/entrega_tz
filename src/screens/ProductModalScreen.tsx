@@ -11,6 +11,7 @@ import {
 } from "react-native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { ListStackParamList } from "../types/navigation-types"
+import { useStore } from "../hooks/useStore"
 
 type ProductModalScreenProps = NativeStackScreenProps<
   ListStackParamList,
@@ -23,6 +24,7 @@ const ProductModalScreen: FC<ProductModalScreenProps> = ({
 }) => {
   const { colors, dark } = useMyTheme()
   const product = route.params.product
+  const {basketStore} = useStore()
 
   return (
     <View style={{ height: "100%", width: "100%" }}>
@@ -153,7 +155,10 @@ const ProductModalScreen: FC<ProductModalScreenProps> = ({
                 </Text>
               </View>
               <TouchableHighlight
-                onPress={() => navigation.goBack()}
+                onPress={() => {
+                  basketStore.addProduct(product)
+                  navigation.goBack()
+                }}
                 underlayColor={"rgb(227, 201, 0)"}
                 style={{
                   backgroundColor: "rgb(252, 224, 0)",

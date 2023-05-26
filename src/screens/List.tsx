@@ -1,9 +1,12 @@
 import React, { FC, useEffect, useState } from "react"
 import {
   ActivityIndicator,
+  Button,
   FlatList,
   RefreshControl,
   Text,
+  TouchableHighlight,
+  TouchableOpacity,
   View,
 } from "react-native"
 import { useMyTheme } from "../hooks/useMyTheme"
@@ -15,12 +18,13 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
 import { StatusBar } from "expo-status-bar"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { ListStackParamList } from "../types/navigation-types"
+import { Ionicons } from "@expo/vector-icons"
 
 type ListScreenProps = NativeStackScreenProps<ListStackParamList, "List">
 
 const List: FC<ListScreenProps> = observer(({ navigation }) => {
   const { colors, dark } = useMyTheme()
-  const { productsStore } = useStore()
+  const { productsStore, basketStore } = useStore()
   const tabBarHeight = useBottomTabBarHeight()
 
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false)
@@ -30,12 +34,22 @@ const List: FC<ListScreenProps> = observer(({ navigation }) => {
   useEffect(() => {
     productsStore.fetchProducts()
     productsStore.fetchStopLists()
-  }, [])
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity onPress={() => {navigation.navigate('Basket')}}>
+          <Ionicons name="cart-outline" color={colors.contrastText} size={27} />
+          <View style={{ position: "absolute", backgroundColor: "yellow", right: 0, borderRadius: 50, padding: 2 }}>
+            <Text style={{fontSize: 12, fontWeight: '600'}}>{basketStore.basketProducts.length}</Text>
+          </View>
+        </TouchableOpacity>
+      ),
+    })
+  }, [dark, basketStore.basketProducts.length])
 
   const RenderItem = ({ item }: { item: ProductType }) => (
     <ProductCard
       colors={colors}
-      disabled={false}
+      disabled={productsStore.blockedProducts.some((p) => p === item.guid)}
       item={item}
       dark={dark}
       onPress={() => navigation.navigate("Product", { product: item })}
@@ -55,26 +69,11 @@ const List: FC<ListScreenProps> = observer(({ navigation }) => {
     setIsRefreshing(false)
   }
 
-  let isBlockedExists = 0
-  productsStore.blockedProducts.map((bp) => {
-    productsStore.products.map((p) => {
-      p.specifications.map((specItem) => {
-        specItem.composition.map((id) => {
-          if (id === bp) isBlockedExists++
-        })
-      })
-    })
-  })
-
   return (
     <>
       <FlatList
         // ! DELETE <TEXT>ISBLOCKEDEXISTS</TEXT>
-        ListFooterComponent={
-          <View style={{ height: tabBarHeight }}>
-            <Text>{isBlockedExists}</Text>
-          </View>
-        }
+        ListFooterComponent={<View style={{ height: tabBarHeight }} />}
         numColumns={2}
         ListEmptyComponent={<ActivityIndicator />}
         keyExtractor={keyExtractor}

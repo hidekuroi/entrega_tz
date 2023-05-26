@@ -4,6 +4,7 @@ import { ProductType } from "./common"
 export type RootStackParamList = {
   Loading: undefined
   MainTabNavigator: NavigatorScreenParams<MainTabParamList>
+  Basket: undefined
 }
 
 export type MainTabParamList = {

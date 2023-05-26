@@ -1,18 +1,12 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import React, { useEffect } from "react"
+import React from "react"
 import { useMyTheme } from "../hooks/useMyTheme"
-import { Platform } from "react-native"
 import { RootStackParamList } from "../types/navigation-types"
-import Loading from "../screens/Loading"
 import MainTabNavigator from "./MainTabNavigator"
+import Basket from "../screens/Basket"
 
 const RootNavigator = () => {
   const RootStack = createNativeStackNavigator<RootStackParamList>()
-  const { colors, dark } = useMyTheme()
-
-  // useEffect(() => {
-  //   dispatch(initializeApp())
-  // }, [])
 
   return (
     <RootStack.Navigator>
@@ -25,6 +19,7 @@ const RootNavigator = () => {
           }}
           component={MainTabNavigator}
         />
+        <RootStack.Screen name="Basket" options={{headerTransparent: true, headerBlurEffect: 'systemThinMaterial'}} component={Basket} />
       </RootStack.Group>
     </RootStack.Navigator>
   )
